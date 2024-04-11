@@ -10,7 +10,7 @@ export interface Param {
 
   name: string;
 
-  type: 'string';
+  type: "string";
 }
 
 export interface ParamValue {
@@ -68,16 +68,19 @@ function EditModeParamView({
     { param: param, paramValues: [...model.paramValues] },
   );
 
-  const [paramValuesID, setParamValuesID_toDelete] = useState<number[]>([]);
+  const [paramValuesID_toDelete, setParamValuesID_toDelete] = useState<
+    number[]
+  >([]);
 
   // const paramValues: ParamValue[] = [];
 
-  
-
   useEffect(() => {
-    dispatchLocalState({type:'update' , payload:{param , paramValues:model.paramValues}});
-    console.log('NESTED COMPONENT UPDATE' , Date.now());
-  } , [model ,param]);
+    dispatchLocalState({
+      type: "update",
+      payload: { param, paramValues: model.paramValues },
+    });
+    console.log("NESTED COMPONENT UPDATE", Date.now());
+  }, [model, param]);
 
   return (
     <div>
@@ -135,38 +138,40 @@ function EditModeParamView({
                   </label>
                   <input
                     onChange={(e) => {
-                      const isChecked = e.currentTarget.checked ;
+                      const isChecked = e.currentTarget.checked;
                       try {
-                        setParamValuesID_toDelete(current => {
-                          
+                        setParamValuesID_toDelete((current) => {
                           // console.log(isTrue);
 
-                          if(isChecked) {
-                            if(!current.includes(paramValue.id)) {
-                              return [...current , paramValue.id] ;
+                          if (isChecked) {
+                            if (!current.includes(paramValue.id)) {
+                              return [...current, paramValue.id];
+                            } else {
+                              return [...current];
                             }
-                            else {
-                              return [...current] ;
+                          } else {
+                            if (current.includes(paramValue.id)) {
+                              return [
+                                ...current.filter(
+                                  (elem) => elem != paramValue.id,
+                                ),
+                              ];
+                            } else {
+                              return [...current];
                             }
                           }
-                          else {
-                            if(current.includes(paramValue.id)) {
-                              return [...current.filter(elem => elem != paramValue.id )]
-                            }
-                            else {
-                              return [...current] ;
-                            }
-                          }                       
                         });
-                      }
-                      catch (err) {
+                      } catch (err) {
                         console.error(err);
                       }
-
-                      
                     }}
                     id={paramValue.id.toLocaleString()}
                     type="checkbox"
+                    checked={
+                      paramValuesID_toDelete.includes(paramValue.id)
+                        ? true
+                        : false
+                    } /// <--- WARNING
                   />
                 </div>
               ))
@@ -184,11 +189,20 @@ function EditModeParamView({
         </button>
         <button
           onClick={() => {
+            // setParamValuesID_toDelete([]);
+
             globalDispatch({
               type: "delete",
               payload: {
-                model:{paramValues:[...globalState.model.paramValues.filter(elem => !paramValuesID.includes(elem.id))]}
-                  /* localState.paramValues */ /* .filter(parVal => parVal) */,
+                // params:[] ,
+                model: {
+                  paramValues: [
+                    ...globalState.model.paramValues.filter(
+                      (elem) => !paramValuesID_toDelete.includes(elem.id),
+                    ),
+                  ],
+                },
+                /* localState.paramValues */ /* .filter(parVal => parVal) */
               },
             });
           }}
@@ -221,15 +235,15 @@ const ModelEditor: React.FC<{ params: Props }> = ({ params }) => {
   const [ifEditModeOn, setIfEditModeOn] = useState(false);
 
   useEffect(() => {
-    console.log('UPDATE') ;
+    console.log("UPDATE");
   });
 
   return (
     <div>
       <h1>Model Editor</h1>
-      <section>
+      <section className={styles.globalParamsWrapper}>
         {globalStucture.params.map((param) => (
-          <>
+          <div>
             <span>{param.name}</span>
             <select>
               {globalStucture.model.paramValues
@@ -242,7 +256,7 @@ const ModelEditor: React.FC<{ params: Props }> = ({ params }) => {
                   );
                 })}
             </select>
-          </>
+          </div>
         ))}
       </section>
       <button
@@ -252,7 +266,7 @@ const ModelEditor: React.FC<{ params: Props }> = ({ params }) => {
       >
         GET MODEL
       </button>
-      <aside>
+      <aside className={styles.editModePanalWrapper}>
         {ifEditModeOn && (
           <div>
             <h1>Edit Mode</h1>

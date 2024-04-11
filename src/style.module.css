@@ -1,9 +1,33 @@
+.globalParamsWrapper {
+  display: flex;
+  gap: 9px;
+  justify-content: center;
+  margin: 0 0 19px 0;
+}
+
+.globalParamsWrapper > div {
+  padding: 9px;
+  display: flex;
+  gap: 9px;
+  border: 1px solid black;
+}
+
+.editModePanalWrapper {
+  margin: 9px auto;
+  border: 1px solid black;
+  padding: 9px;
+  width: max-content;
+}
+
 .sectionsWrapper {
   display: flex;
   justify-content: center;
 }
 
-.sectionParam {
+.sectionsWrapper > section,
+.sectionsWrapper > button {
+  padding: 9px;
+  border: 1px solid black;
 }
 
 .sectionParamValues {
