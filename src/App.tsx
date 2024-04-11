@@ -70,21 +70,36 @@ function EditModeParamView({
         payload: Partial<{ param: Param; paramValues: ParamValue[] }>;
       },
     ) => ({ ...state, ...action.payload }),
-    { param: param, paramValues: model.paramValues },
+    { param: param, paramValues: [...model.paramValues] },
   );
+
+  const [paramValuesID, setParamValuesID_toDelete] = useState<number[]>([]);
 
   // const paramValues: ParamValue[] = [];
 
   useLayoutEffect(() => {}, []);
 
-  useEffect(() => {});
+  useEffect(() => {
+    console.log(paramValuesID);
+  } , [paramValuesID]);
 
   return (
     <div>
       <h2>{param.name}</h2>
       <div className={styles.sectionsWrapper}>
         <section className="param">
-          <input onInput={(e) => {dispatchLocalState({type:'update' , payload:{param:{...localState.param , name:e.currentTarget.value}}})}} type="text" value={localState.param.name} />
+          <input
+            onInput={(e) => {
+              dispatchLocalState({
+                type: "update",
+                payload: {
+                  param: { ...localState.param, name: e.currentTarget.value },
+                },
+              });
+            }}
+            type="text"
+            value={localState.param.name}
+          />
         </section>
         <section className={styles.sectionParamValues}>
           {
@@ -96,28 +111,68 @@ function EditModeParamView({
                 }
               })
               .map((paramValue) => (
-                <input
-                  onInput={(e) => {
-                    dispatchLocalState({
-                      type: "update",
-                      payload: {
-                        paramValues: [
-                          ...localState.paramValues.filter((parVal) => {
-                            if (parVal.id !== paramValue.id) {
-                              return true;
-                            } else {
-                              parVal.value = e.currentTarget.value;
-                              return true;
+                <div>
+                  <input
+                    onInput={(e) => {
+                      dispatchLocalState({
+                        type: "update",
+                        payload: {
+                          paramValues: [
+                            ...localState.paramValues.filter((parVal) => {
+                              if (parVal.id !== paramValue.id) {
+                                return true;
+                              } else {
+                                parVal.value = e.currentTarget.value;
+                                return true;
+                              }
+                            }),
+                          ],
+                        },
+                      });
+                    }}
+                    className="param-value"
+                    type="text"
+                    value={paramValue.value}
+                  />
+                  <label htmlFor={paramValue.id.toLocaleString()}>
+                    mark to delete
+                  </label>
+                  <input
+                    onChange={(e) => {
+                      const isChecked = e.currentTarget.checked ;
+                      try {
+                        setParamValuesID_toDelete(current => {
+                          
+                          // console.log(isTrue);
+
+                          if(isChecked) {
+                            if(!current.includes(paramValue.id)) {
+                              return [...current , paramValue.id] ;
                             }
-                          }),
-                        ],
-                      },
-                    });
-                  }}
-                  className="param-value"
-                  type="text"
-                  value={paramValue.value}
-                />
+                            else {
+                              return [...current] ;
+                            }
+                          }
+                          else {
+                            if(current.includes(paramValue.id)) {
+                              return [...current.filter(elem => elem != paramValue.id )]
+                            }
+                            else {
+                              return [...current] ;
+                            }
+                          }                       
+                        });
+                      }
+                      catch (err) {
+                        console.error(err);
+                      }
+
+                      
+                    }}
+                    id={paramValue.id.toLocaleString()}
+                    type="checkbox"
+                  />
+                </div>
               ))
           }
         </section>
@@ -130,6 +185,19 @@ function EditModeParamView({
           }}
         >
           UPDATE
+        </button>
+        <button
+          onClick={() => {
+            dispatchLocalState({
+              type: "delete",
+              payload: {
+                paramValues:
+                  localState.paramValues /* .filter(parVal => parVal) */,
+              },
+            });
+          }}
+        >
+          DELETE
         </button>
       </div>
     </div>
