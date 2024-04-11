@@ -54,16 +54,24 @@ function EditModeParamView({
 }) {
   // const [localParamValues, dispatchLocalParamValues] = useReducer<(state:{param:Param ,paramValues:ParamValue[]} , action:{type:string , payload:{param:Param , paramValues:ParamValue[]}}) => } > ();
 
-  const [localState , dispatchLocalState] =
-    useReducer<
-      (
-        state: { param: Param; paramValues: ParamValue[] },
-        action: {
-          type: string;
-          payload: Partial<{ param: Param; paramValues: ParamValue[] }>;
-        },
-      ) => { param: Param; paramValues: ParamValue[] }
-    >((state:{param:Param , paramValues:ParamValue[]} , action:{type:string , payload:Partial<{param:Param , paramValues:ParamValue[]}>}) => ({...state , ...action.payload}) , {param:param , paramValues:model.paramValues});
+  const [localState, dispatchLocalState] = useReducer<
+    (
+      state: { param: Param; paramValues: ParamValue[] },
+      action: {
+        type: string;
+        payload: Partial<{ param: Param; paramValues: ParamValue[] }>;
+      },
+    ) => { param: Param; paramValues: ParamValue[] }
+  >(
+    (
+      state: { param: Param; paramValues: ParamValue[] },
+      action: {
+        type: string;
+        payload: Partial<{ param: Param; paramValues: ParamValue[] }>;
+      },
+    ) => ({ ...state, ...action.payload }),
+    { param: param, paramValues: model.paramValues },
+  );
 
   // const paramValues: ParamValue[] = [];
 
@@ -92,16 +100,18 @@ function EditModeParamView({
                   onInput={(e) => {
                     dispatchLocalState({
                       type: "update",
-                      payload: {paramValues:[
-                        ...localState.paramValues.filter((parVal) => {
-                          if (parVal.id !== paramValue.id) {
-                            return true;
-                          } else {
-                            parVal.value = e.currentTarget.value;
-                            return true;
-                          }
-                        }),
-                      ]},
+                      payload: {
+                        paramValues: [
+                          ...localState.paramValues.filter((parVal) => {
+                            if (parVal.id !== paramValue.id) {
+                              return true;
+                            } else {
+                              parVal.value = e.currentTarget.value;
+                              return true;
+                            }
+                          }),
+                        ],
+                      },
                     });
                   }}
                   className="param-value"
