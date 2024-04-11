@@ -52,12 +52,18 @@ function EditModeParamView({
     }>;
   }>;
 }) {
-  const [localParamValues, dispatchLocalParamValues] = useReducer(
-    (state: ParamValue[], action: { type: string; payload: ParamValue[] }) => [
-      ...action.payload,
-    ],
-    model.paramValues,
-  );
+  // const [localParamValues, dispatchLocalParamValues] = useReducer<(state:{param:Param ,paramValues:ParamValue[]} , action:{type:string , payload:{param:Param , paramValues:ParamValue[]}}) => } > ();
+
+  const [localState , dispatchLocalState] =
+    useReducer<
+      (
+        state: { param: Param; paramValues: ParamValue[] },
+        action: {
+          type: string;
+          payload: Partial<{ param: Param; paramValues: ParamValue[] }>;
+        },
+      ) => { param: Param; paramValues: ParamValue[] }
+    >((state:{param:Param , paramValues:ParamValue[]} , action:{type:string , payload:Partial<{param:Param , paramValues:ParamValue[]}>}) => ({...state , ...action.payload}) , {param:param , paramValues:model.paramValues});
 
   // const paramValues: ParamValue[] = [];
 
@@ -74,7 +80,7 @@ function EditModeParamView({
         </section>
         <section className={styles.sectionParamValues}>
           {
-            /* stucture. */ /* model.paramValues */ localParamValues
+            /* stucture. */ /* model.paramValues */ localState.paramValues
               .filter((paramValue) => {
                 if (paramValue.paramId === param.id) {
                   // paramValues.push(paramValue);
@@ -84,10 +90,10 @@ function EditModeParamView({
               .map((paramValue) => (
                 <input
                   onInput={(e) => {
-                    dispatchLocalParamValues({
+                    dispatchLocalState({
                       type: "update",
-                      payload: [
-                        ...localParamValues.filter((parVal) => {
+                      payload: {paramValues:[
+                        ...localState.paramValues.filter((parVal) => {
                           if (parVal.id !== paramValue.id) {
                             return true;
                           } else {
@@ -95,7 +101,7 @@ function EditModeParamView({
                             return true;
                           }
                         }),
-                      ],
+                      ]},
                     });
                   }}
                   className="param-value"
@@ -109,7 +115,7 @@ function EditModeParamView({
           onClick={() => {
             globalDispatch({
               type: "update",
-              payload: { model: { paramValues: localParamValues } },
+              payload: { model: { paramValues: localState.paramValues } },
             });
           }}
         >
