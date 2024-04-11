@@ -188,11 +188,11 @@ function EditModeParamView({
         </button>
         <button
           onClick={() => {
-            dispatchLocalState({
+            globalDispatch({
               type: "delete",
               payload: {
-                paramValues:
-                  localState.paramValues /* .filter(parVal => parVal) */,
+                model:{paramValues:[...globalState.model.paramValues.filter(elem => !paramValuesID.includes(elem.id))]}
+                  /* localState.paramValues */ /* .filter(parVal => parVal) */,
               },
             });
           }}
