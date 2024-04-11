@@ -35,10 +35,26 @@ interface i_MyReducerModel {
   values: ParamValue[];
 }
 
-function EditModeParamView({ param, model }: { param: Param; model: Model }) {
-  const [state, dispatch] = useReducer(
+function EditModeParamView({
+  param,
+  model,
+  globalState,
+  globalDispatch,
+}: {
+  param: Param;
+  model: Model;
+  globalState: { params: Param[]; model: Model };
+  globalDispatch: React.Dispatch<{
+    type: string;
+    payload: Partial<{
+      params: Param[];
+      model: Model;
+    }>;
+  }>;
+}) {
+  const [localParamValues, dispatchLocalParamValues] = useReducer(
     (state: ParamValue[], action: { type: string; payload: ParamValue[] }) => [
-       ...action.payload,
+      ...action.payload,
     ],
     model.paramValues,
   );
@@ -58,7 +74,7 @@ function EditModeParamView({ param, model }: { param: Param; model: Model }) {
         </section>
         <section className={styles.sectionParamValues}>
           {
-            /* stucture. */ /* model.paramValues */ state
+            /* stucture. */ /* model.paramValues */ localParamValues
               .filter((paramValue) => {
                 if (paramValue.paramId === param.id) {
                   // paramValues.push(paramValue);
@@ -68,21 +84,17 @@ function EditModeParamView({ param, model }: { param: Param; model: Model }) {
               .map((paramValue) => (
                 <input
                   onInput={(e) => {
-                    dispatch({
+                    dispatchLocalParamValues({
                       type: "update",
                       payload: [
-                        ...state.filter(
-                          (parVal) => {
-                            if(parVal.id !== paramValue.id) {
-                              return true ;
-                            }
-                            else {
-                              parVal.value = e.currentTarget.value ;
-                              return true ;
-                            }
-                          },
-                        ),
-                        
+                        ...localParamValues.filter((parVal) => {
+                          if (parVal.id !== paramValue.id) {
+                            return true;
+                          } else {
+                            parVal.value = e.currentTarget.value;
+                            return true;
+                          }
+                        }),
                       ],
                     });
                   }}
@@ -93,6 +105,16 @@ function EditModeParamView({ param, model }: { param: Param; model: Model }) {
               ))
           }
         </section>
+        <button
+          onClick={() => {
+            globalDispatch({
+              type: "update",
+              payload: { model: { paramValues: localParamValues } },
+            });
+          }}
+        >
+          UPDATE
+        </button>
       </div>
     </div>
   );
@@ -102,7 +124,7 @@ function myReducer(
   state: { params: Param[]; model: Model },
   action: { type: string; payload: Partial<{ params: Param[]; model: Model }> },
 ) {
-  return { ...state , ...action.payload };
+  return { ...state, ...action.payload };
 }
 
 const ModelEditor: React.FC<{ params: Props }> = ({ params }) => {
@@ -152,7 +174,12 @@ const ModelEditor: React.FC<{ params: Props }> = ({ params }) => {
             <h1>Edit Mode</h1>
 
             {globalStucture.params.map((param) => (
-              <EditModeParamView param={param} model={globalStucture.model} />
+              <EditModeParamView
+                param={param}
+                model={globalStucture.model}
+                globalState={globalStucture}
+                globalDispatch={dispatchGlobalStructure}
+              />
             ))}
           </div>
         )}
