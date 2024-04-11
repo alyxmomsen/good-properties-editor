@@ -77,11 +77,12 @@ function EditModeParamView({
 
   // const paramValues: ParamValue[] = [];
 
-  useLayoutEffect(() => {}, []);
+  
 
   useEffect(() => {
-    console.log(paramValuesID);
-  } , [paramValuesID]);
+    dispatchLocalState({type:'update' , payload:{param , paramValues:model.paramValues}});
+    console.log('NESTED COMPONENT UPDATE' , Date.now());
+  } , [model ,param]);
 
   return (
     <div>
@@ -223,6 +224,10 @@ const ModelEditor: React.FC<{ params: Props }> = ({ params }) => {
   >(myReducer, params);
 
   const [ifEditModeOn, setIfEditModeOn] = useState(false);
+
+  useEffect(() => {
+    console.log('UPDATE') ;
+  });
 
   return (
     <div>
