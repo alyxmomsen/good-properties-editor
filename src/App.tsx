@@ -84,7 +84,7 @@ function EditModeParamView({
       <h2>{param.name}</h2>
       <div className={styles.sectionsWrapper}>
         <section className="param">
-          <input type="text" value={param.name} />
+          <input onInput={(e) => {dispatchLocalState({type:'update' , payload:{param:{...localState.param , name:e.currentTarget.value}}})}} type="text" value={localState.param.name} />
         </section>
         <section className={styles.sectionParamValues}>
           {
