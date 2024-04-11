@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useReducer, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import { initial_structure } from "./initial-structure/initial-structure";
 
-interface Color {}
-
-interface Param {
+export interface Param {
   id: number;
 
   name: string;
@@ -12,16 +11,14 @@ interface Param {
   type: "string";
 }
 
-interface ParamValue {
+export interface ParamValue {
   paramId: number;
 
   value: string;
 }
 
-interface Model {
+export interface Model {
   paramValues: ParamValue[];
-
-  colors: Color[];
 }
 
 interface Props {
@@ -30,38 +27,60 @@ interface Props {
   model: Model;
 }
 
-/* class ParamEditor extends React.Component<Props, State> {
-          public getModel(): Model {
-          
-          }
-          
-          } */
+interface i_MyReducerModel {
+  params: Param[];
+  values: ParamValue[];
+}
 
-const ModelEditor: React.FC<{ params: Param[] }> = ({ params }) => {
+function myReducer(
+  state: { params: Param[]; model: Model },
+  action: { type: string; payload: Partial<{ params: Param[]; model: Model }> },
+) {
+  return { ...state };
+}
+
+const ModelEditor: React.FC<{ params: Props }> = ({ params }) => {
+  const [structure, dispatch] = useReducer<
+    (
+      state: { params: Param[]; model: Model },
+      action: {
+        type: string;
+        payload: Partial<{ params: Param[]; model: Model }>;
+      },
+    ) => { params: Param[]; model: Model }
+  >(myReducer, params);
+
   return (
     <div>
       <h1>Model Editor</h1>
+      <section>
+        {structure.params.map((param) => (
+          <>
+            <span>{param.name}</span>
+            <select>
+              {structure.model.paramValues
+                .filter((paramValue) => paramValue.paramId === param.id)
+                .map((paramValue) => {
+                  return (
+                    <option value={paramValue.paramId}>
+                      {paramValue.value}
+                    </option>
+                  );
+                })}
+            </select>
+          </>
+        ))}
+      </section>
+      <button onClick={() => {}}>GET MODEL</button>
+      <aside>{}</aside>
     </div>
   );
 };
 
-const params_example: Param[] = [
-  {
-    id: 1,
-    name: "color",
-    type: "string",
-  },
-  {
-    id: 2,
-    name: "length",
-    type: "string",
-  },
-];
-
 function App() {
   return (
     <div className="App">
-      <ModelEditor params={params_example} />
+      <ModelEditor params={initial_structure} />
     </div>
   );
 }
