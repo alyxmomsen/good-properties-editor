@@ -1,65 +1,74 @@
 import { Model, Param } from "../App";
 
 export const initial_structure: {
-    params: Param[];
-    model: Model;
-  } = {
-    params: [
+  params: Param[];
+  model: Model;
+} = {
+  params: [
+    {
+      id: 0,
+      name: "length",
+      type: "string",
+    },
+    {
+      id: 1,
+      name: "color",
+      type: "string",
+    },
+    {
+      id: 2,
+      name: "shape",
+      type: "string",
+    },
+  ],
+
+  model: {
+    paramValues: [
       {
         id: 0,
-        name: "length",
-        type: "string",
+        paramId: 0,
+        value: "large",
       },
       {
         id: 1,
-        name: "color",
-        type: "string",
+        paramId: 0,
+        value: "small",
       },
       {
         id: 2,
-        name: "price",
-        type: "string",
+        paramId: 0,
+        value: "biggest",
+      },
+      {
+        id: 3,
+        paramId: 1,
+        value: "red",
+      },
+      {
+        id: 4,
+        paramId: 1,
+        value: "green",
+      },
+      {
+        id: 5,
+        paramId: 1,
+        value: "blue",
+      },
+      {
+        id: 6,
+        paramId: 2,
+        value: "triangle",
+      },
+      {
+        id: 7,
+        paramId: 2,
+        value: "circle",
+      },
+      {
+        id: 8,
+        paramId: 2,
+        value: "square",
       },
     ],
-  
-    model: {
-      paramValues: [
-        {
-          paramId: 0,
-          value: "large",
-        },
-        {
-          paramId: 0,
-          value: "small",
-        },
-        {
-          paramId: 0,
-          value: "biggest",
-        },
-        {
-          paramId: 1,
-          value: "red",
-        },
-        {
-          paramId: 1,
-          value: "green",
-        },
-        {
-          paramId: 1,
-          value: "blue",
-        },
-        {
-          paramId: 2,
-          value: "100",
-        },
-        {
-          paramId: 2,
-          value: "200",
-        },
-        {
-          paramId: 2,
-          value: "300",
-        },
-      ],
-    },
-  };
+  },
+};

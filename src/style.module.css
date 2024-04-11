@@ -1,0 +1,12 @@
+.sectionsWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.sectionParam {
+}
+
+.sectionParamValues {
+  display: flex;
+  flex-direction: column;
+}
