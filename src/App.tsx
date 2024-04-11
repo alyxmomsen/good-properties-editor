@@ -10,7 +10,7 @@ export interface Param {
 
   name: string;
 
-  type: "string";
+  type: 'string';
 }
 
 export interface ParamValue {
@@ -28,11 +28,6 @@ interface Props {
   params: Param[];
 
   model: Model;
-}
-
-interface i_MyReducerModel {
-  params: Param[];
-  values: ParamValue[];
 }
 
 function EditModeParamView({
