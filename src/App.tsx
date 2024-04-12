@@ -4,6 +4,7 @@ import "./App.css";
 import { initial_structure } from "./initial-structure/initial-structure";
 // styles module
 import styles from "./style.module.css";
+import { escape } from "querystring";
 
 export interface Param {
   id: number;
@@ -30,6 +31,15 @@ interface Props {
   model: Model;
 }
 
+
+type tLocalStateReducer = (
+  state: { param: Param; paramValues: ParamValue[] },
+  action: {
+    type: string;
+    payload: Partial<{ param: Param; paramValues: ParamValue[] }>;
+  },
+) => { param: Param; paramValues: ParamValue[] }
+
 function EditModeParamView({
   param,
   model,
@@ -49,15 +59,7 @@ function EditModeParamView({
 }) {
   // const [localParamValues, dispatchLocalParamValues] = useReducer<(state:{param:Param ,paramValues:ParamValue[]} , action:{type:string , payload:{param:Param , paramValues:ParamValue[]}}) => } > ();
 
-  const [localState, dispatchLocalState] = useReducer<
-    (
-      state: { param: Param; paramValues: ParamValue[] },
-      action: {
-        type: string;
-        payload: Partial<{ param: Param; paramValues: ParamValue[] }>;
-      },
-    ) => { param: Param; paramValues: ParamValue[] }
-  >(
+  const [localState, dispatchLocalState] = useReducer<tLocalStateReducer>(
     (
       state: { param: Param; paramValues: ParamValue[] },
       action: {
@@ -85,8 +87,10 @@ function EditModeParamView({
   return (
     <div>
       <h2>{param.name}</h2>
+      
       <div className={styles.sectionsWrapper}>
         <section className="param">
+          
           <input
             onInput={(e) => {
               dispatchLocalState({
@@ -181,7 +185,7 @@ function EditModeParamView({
           onClick={() => {
             globalDispatch({
               type: "update",
-              payload: { model: { paramValues: localState.paramValues } },
+              payload: {params:[...globalState.params.map(elem => elem.id === localState.param.id ? localState.param : elem ) ,  ] , model: { paramValues: localState.paramValues } },
             });
           }}
         >
@@ -221,16 +225,16 @@ function myReducer(
   return { ...state, ...action.payload };
 }
 
+export type tGlobalStructReducer =  (
+  state: { params: Param[]; model: Model },
+  action: {
+    type: string;
+    payload: Partial<{ params: Param[]; model: Model }>;
+  },
+) => { params: Param[]; model: Model }
+
 const ModelEditor: React.FC<{ params: Props }> = ({ params }) => {
-  const [globalStucture, dispatchGlobalStructure] = useReducer<
-    (
-      state: { params: Param[]; model: Model },
-      action: {
-        type: string;
-        payload: Partial<{ params: Param[]; model: Model }>;
-      },
-    ) => { params: Param[]; model: Model }
-  >(myReducer, params);
+  const [globalStucture, globalStructureDispatch] = useReducer<tGlobalStructReducer>(myReducer, params);
 
   const [ifEditModeOn, setIfEditModeOn] = useState(false);
 
@@ -276,7 +280,7 @@ const ModelEditor: React.FC<{ params: Props }> = ({ params }) => {
                 param={param}
                 model={globalStucture.model}
                 globalState={globalStucture}
-                globalDispatch={dispatchGlobalStructure}
+                globalDispatch={globalStructureDispatch}
               />
             ))}
           </div>
