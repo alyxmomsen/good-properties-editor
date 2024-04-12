@@ -5,32 +5,68 @@
   margin: 0 0 19px 0;
 }
 
+
+
 .globalParamsWrapper > div {
   padding: 9px;
   display: flex;
   gap: 9px;
-  border: 1px solid black;
+  border: 1px solid #3f677d;
+  
+}
+
+.globalParamsWrapper > div > span {
+  color: #d2c15c;
+  text-transform: uppercase;
 }
 
 .editModePanalWrapper {
   margin: 9px auto;
-  border: 1px solid black;
+  border: 1px solid #3f677d;
   padding: 9px;
   width: max-content;
+  background-color: #295268;
+  border-radius: 9px 
 }
 
 .sectionsWrapper {
   display: flex;
   justify-content: center;
+  /* border: 1px solid #295268 ; */
+  border: 1px solid #3f677d;
+  border-radius: 9px 
 }
 
 .sectionsWrapper > section,
 .sectionsWrapper > button {
   padding: 9px;
-  border: 1px solid black;
+  color: #a3d4ef;
+  background-color: #446d83;
+  /* border: 1px solid black; */
+}
+
+.buttonSection {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
 }
 
 .sectionParamValues {
   display: flex;
   flex-direction: column;
+  gap: 9px;
 }
+
+.sectionParamValues > div {
+  display: flex;
+  gap:9px ;
+}
+
+.sectionParamValues > div > label {
+  color: #a3d4ef;
+}
+
+.button {
+  background-color: #295268;
+}
+

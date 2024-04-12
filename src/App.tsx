@@ -91,7 +91,7 @@ function EditModeParamView({
       <div className={styles.sectionsWrapper}>
         <section className="param">
           
-          <input
+          <input 
             onInput={(e) => {
               dispatchLocalState({
                 type: "update",
@@ -181,6 +181,7 @@ function EditModeParamView({
               ))
           }
         </section>
+        <section className={styles.buttonSection}>
         <button
           onClick={() => {
             globalDispatch({
@@ -213,6 +214,7 @@ function EditModeParamView({
         >
           DELETE
         </button>
+        </section>
       </div>
     </div>
   );
@@ -270,9 +272,9 @@ const ModelEditor: React.FC<{ params: Props }> = ({ params }) => {
       >
         GET MODEL
       </button>
-      <aside className={styles.editModePanalWrapper}>
-        {ifEditModeOn && (
-          <div>
+      {ifEditModeOn && (
+        <aside className={styles.editModePanalWrapper}>
+      <div>
             <h1>Edit Mode</h1>
 
             {globalStucture.params.map((param) => (
@@ -284,8 +286,9 @@ const ModelEditor: React.FC<{ params: Props }> = ({ params }) => {
               />
             ))}
           </div>
-        )}
       </aside>
+      )}
+      
     </div>
   );
 };
