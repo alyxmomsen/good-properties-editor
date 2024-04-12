@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/good-properties-editor/static/css/main.202cc326.css",
-    "main.js": "/good-properties-editor/static/js/main.60db3499.js",
+    "main.css": "/good-properties-editor/static/css/main.b8c5a113.css",
+    "main.js": "/good-properties-editor/static/js/main.1c24c840.js",
     "static/js/453.cc9cd908.chunk.js": "/good-properties-editor/static/js/453.cc9cd908.chunk.js",
     "index.html": "/good-properties-editor/index.html",
-    "main.202cc326.css.map": "/good-properties-editor/static/css/main.202cc326.css.map",
-    "main.60db3499.js.map": "/good-properties-editor/static/js/main.60db3499.js.map",
+    "main.b8c5a113.css.map": "/good-properties-editor/static/css/main.b8c5a113.css.map",
+    "main.1c24c840.js.map": "/good-properties-editor/static/js/main.1c24c840.js.map",
     "453.cc9cd908.chunk.js.map": "/good-properties-editor/static/js/453.cc9cd908.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.202cc326.css",
-    "static/js/main.60db3499.js"
+    "static/css/main.b8c5a113.css",
+    "static/js/main.1c24c840.js"
   ]
 }
